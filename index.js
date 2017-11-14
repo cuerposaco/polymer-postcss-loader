@@ -22,7 +22,6 @@ module.exports = function polymerPostcssLoader(source) {
       $element.html(),
       { syntax: postcssSyntax }
     ).then(function (result) {
-      console.log('cssParser --->', result.content);
       loaderCallback(null, result.content);
     });
   };
