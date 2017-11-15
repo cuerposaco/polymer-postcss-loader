@@ -1,37 +1,3 @@
-/*
-const cheerio = require('cheerio');
-const postcss = require('postcss');
-const postcssSyntax = require('postcss-html');
-const autoprefixer = require('autoprefixer');
-
-
-module.exports = function polymerPostcssLoader(source) {
-  const loaderCallback = this.async();
-
-  const $domSource = cheerio.load(source);
-
-  const domModuleElement = $domSource('dom-module');
-  const $dom2 = cheerio.load(domModuleElement.html());
-
-  const $domTemplate = cheerio.load($dom2('template').html());
-  // const styleTag = $domTemplate('style');
-
-  const styleParser = $element => postcss([
-    autoprefixer(),
-  ]).process(
-    source,
-    { syntax: postcssSyntax },
-  ).then((result) => {
-    console.log(`\n\n${result.content}\n\n`);
-    loaderCallback(null, result.content);
-  });
-
-  styleParser($domSource).catch((err) => {
-    console.log(err);
-    loaderCallback(null, source);
-  });
-};*/
-
 const parse5 = require('parse5');
 const postcss = require('postcss');
 const postcssSyntax = require('postcss-html');
@@ -39,6 +5,7 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = function polymerPostcssLoader(source) {
   const loaderCallback = this.async();
+  const htmlFilePath = this.resourcePath;
   
   const getDomModule = parsed => parsed.childNodes
     .find(child => child.nodeName === 'html').childNodes
@@ -71,20 +38,22 @@ module.exports = function polymerPostcssLoader(source) {
 
 
   const parsed = parse5.parse(source);
-  
+
   const domModule = getDomModule(parsed);
   if (!domModule) {
     return loaderCallback(null, source);
   }
 
   const template = domModule.childNodes
-    .find(child => child.nodeName === 'template').content  
-  
-  const styles = getStyleTag(template)[0];
+    .find(child => child.nodeName === 'template');
+  if (!template) { return loaderCallback(null, source); }
+
+  const styles = getStyleTag(template.content)[0];
+  if (!styles.length) { return loaderCallback(null, source); }
   styleParser(styles)
     .then(_styles => loaderCallback(null, fixTemplate(_styles, source)))
     .catch(err => {
-      console.log(`[polymerPostcssLoader] Error: ${err}`);
+      console.log(`[polymerPostcssLoader][${htmlFilePath}] Error: ${err}`);
       loaderCallback(null, source);
     });
 }
