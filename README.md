@@ -108,8 +108,8 @@ npm install barrabes-polymer-styles-loader --save-dev
 
 // webpack.config.js file
 module.exports = {
-  // {...}
-  // transpilers
+  // { ... previous config }
+  // loaders
   module: {
     rules: [
       {
