@@ -115,7 +115,15 @@ module.exports = {
       {
         test: /\.html$/,
         use: [
-          'barrabes-polymer-styles-loader',
+          { 
+            loader: 'barrabes-polymer-styles-loader',
+            // postcss options
+            options: {
+              plugins: [
+                require('autoprefixer')()
+              ]
+            }
+          },
         ],
       }
     ],
@@ -140,7 +148,15 @@ module.exports = {
           'babel-loader',
           // https://github.com/webpack-contrib/polymer-webpack-loader
           'polymer-webpack-loader',
-          'barrabes-polymer-styles-loader',
+          { 
+            loader: 'barrabes-polymer-styles-loader',
+            // postcss options
+            options: {
+              plugins: [
+                require('autoprefixer')()
+              ]
+            }
+          },
         ],
       }
     ]
