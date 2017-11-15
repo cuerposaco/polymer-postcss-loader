@@ -129,7 +129,7 @@ module.exports = {
 ```js
 
 module.exports = {
-  // ... previous config
+  // { ... previous config }
   // loaders
   module: {
     rules: [
