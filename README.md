@@ -1,4 +1,4 @@
-# polymer-postcss-loader
+# barrabes-polymer-styles-loader
 
 Replace Polymer Component tag `<style>` content with `postcss` processed styles.
 
@@ -48,6 +48,7 @@ Replace Polymer Component tag `<style>` content with `postcss` processed styles.
 ```
 
 - output:
+
 ```html
 // my-custom-loader.html
 <link rel='import' href='./bower_components/polymer/polymer-element.html'>
