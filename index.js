@@ -1,11 +1,13 @@
+const { getOptions } = require('loader-utils');
 const parse5 = require('parse5');
 const postcss = require('postcss');
 const postcssSyntax = require('postcss-html');
-const autoprefixer = require('autoprefixer');
+
 
 module.exports = function polymerPostcssLoader(source) {
   const loaderCallback = this.async();
   const htmlFilePath = this.resourcePath;
+  const options = getOptions(this);
 
   const getDomModule = parsed => parsed.childNodes
     .find(child => child.nodeName === 'html').childNodes
@@ -30,10 +32,8 @@ module.exports = function polymerPostcssLoader(source) {
     return _source
       .replace(/<style>[\s\S]+<\/style>/g, template);
   };
-
-  const styleParser = styleValue => postcss([
-    autoprefixer(),
-  ]).process(
+  const postcssPlugins = (options && options.plugins) || [];
+  const styleParser = styleValue => postcss(postcssPlugins).process(
     styleValue,
     { syntax: postcssSyntax },
   ).then(result => result.content);
@@ -55,7 +55,7 @@ module.exports = function polymerPostcssLoader(source) {
   styleParser(styles)
     .then(_styles => loaderCallback(null, fixTemplate(_styles, source)))
     .catch((err) => {
-      console.log(`[polymerPostcssLoader][${htmlFilePath}] Error: ${err}`);
+      console.log(`[polymerPostcssLoader][${htmlFilePath}] Warning: ${err}`);
       loaderCallback(null, source);
     });
 };
