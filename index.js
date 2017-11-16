@@ -35,7 +35,7 @@ module.exports = function polymerPostcssLoader(source) {
   const postcssPlugins = (options && options.plugins) || [];
   const styleParser = styleValue => postcss(postcssPlugins).process(
     styleValue,
-    { syntax: postcssSyntax },
+    { syntax: postcssSyntax }
   ).then(result => result.content);
 
 
