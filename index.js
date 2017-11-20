@@ -3,6 +3,8 @@ const parse5 = require('parse5');
 const postcss = require('postcss');
 const postcssSyntax = require('postcss-html');
 
+const showedInfo = false;
+
 module.exports = function polymerPostcssLoader(source) {
   
   // Loader configuration
@@ -12,11 +14,12 @@ module.exports = function polymerPostcssLoader(source) {
   const options = getOptions(this);
   const postcssPlugins = (options && options.plugins) || [];
 
-  if (options.verbose) {
+  if (options.verbose && !showedInfo) {
     const autoprefixerInfo = postcssPlugins.slice().find(plugin => plugin.postcssPlugin === 'autoprefixer').info();
-    console.log(`------------------- ${htmlFilePath} -------------------------`);
+    console.log(`------------------- [Autoprefixer INFO] -------------------------`);
     console.log(autoprefixerInfo);
-    console.log(`-------------------------------------------------------------`);  
+    console.log(`-------------------------------------------------------------`);
+    showedInfo = true;
   }
 
   // Loader Helpers
