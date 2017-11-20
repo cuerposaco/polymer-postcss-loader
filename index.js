@@ -22,6 +22,31 @@ module.exports = function polymerPostcssLoader(source) {
     showedInfo = true;
   }
 
+  // Exclude options
+  const isExcluded = (file) => {
+    if (!options.exclude) return false;
+
+    let matched = null;
+    const testFileRegexp = (excludeRule) => {
+      if (excludeRule.constructor === RegExp) return file.match(excludeRule);
+      return excludeRule === file;
+    };
+    
+    if (Array.isArray(options.exclude)){
+      matched = options.exclude.some(testFileRegexp)
+    } else {
+      matched = testFileRegexp(options.exclude);  
+    }
+    
+    // if(options.verbose) console.log(`[${file}] -- match: ${matched}\n`);
+    return matched;
+  }
+
+  if (isExcluded(htmlFilePath)) {
+    if(options.verbose) console.log(`${htmlFilePath} excluded...\n`);
+    return loaderCallback(null, source);
+  }
+
   // Loader Helpers
   const getDomModule = parsed => parsed.childNodes
     .find(child => child.nodeName === 'html').childNodes
