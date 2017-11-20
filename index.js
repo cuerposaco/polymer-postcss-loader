@@ -35,7 +35,15 @@ module.exports = function polymerPostcssLoader(source) {
         styleValue,
         { syntax: options.syntax || postcssSyntax }
       )
-      .then(result => result.content)
+      .then(result => {
+        if (options.verbose) {
+          const autoprefixerInfo = postcssPlugins.slice().find(plugin => plugin.postcssPlugin === 'autoprefixer').info();
+          console.log(`------------------- ${htmlFilePath} -------------------------`);
+          console.log(autoprefixerInfo);
+          console.log(`-------------------------------------------------------------`);  
+        }
+        return result.content;
+      })
       .catch(err => {
         this.emitWarning(err);
         loaderCallback(null, source);
@@ -62,7 +70,8 @@ module.exports = function polymerPostcssLoader(source) {
   
   styleParser(styles)
     .then(_styles => {
-      loaderCallback(null, fixTemplate(_styles, source))
+      // console.log(`\n\nSTYLES\n${_styles}\n\n`);
+      loaderCallback(null, fixTemplate(_styles, source));
     })
     .catch((err) => {
       this.emitWarning(err);
