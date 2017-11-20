@@ -3,7 +3,7 @@ const parse5 = require('parse5');
 const postcss = require('postcss');
 const postcssSyntax = require('postcss-html');
 
-const showedInfo = false;
+let showedInfo = false;
 
 module.exports = function polymerPostcssLoader(source) {
   
