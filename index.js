@@ -71,10 +71,10 @@ module.exports = function polymerPostcssLoader(source) {
         { syntax: options.syntax || postcssSyntax }
       )
       .then(result => result.content)
-      .catch(err => {
+      /*.catch(err => {
         this.emitWarning(err);
         loaderCallback(null, source);
-      })
+      })*/
   );
 
   const fixTemplate = (result, mainSource) => {
